@@ -11,7 +11,9 @@ sudo apt install -y \
   gcc \
   make \
   unzip \
-  wget
+  wget \
+  xclip \
+  wl-clipboard
 
 echo "==> Installing Neovim (latest stable)..."
 if nvim --version 2>/dev/null | grep -q "^NVIM v0\.1[0-9]"; then
