@@ -26,6 +26,19 @@ else
   echo "    gh already installed, skipping"
 fi
 
+echo "==> Installing JetBrains Mono Nerd Font..."
+FONT_DIR="$HOME/.local/share/fonts"
+mkdir -p "$FONT_DIR"
+if fc-list | grep -qi "JetBrainsMono"; then
+  echo "    JetBrains Mono Nerd Font already installed, skipping"
+else
+  curl -fLo /tmp/JetBrainsMono.zip \
+    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+  unzip -o /tmp/JetBrainsMono.zip -d "$FONT_DIR/JetBrainsMono" '*.ttf'
+  fc-cache -fv "$FONT_DIR"
+  rm /tmp/JetBrainsMono.zip
+fi
+
 echo "==> Setting up tmux config..."
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 ln -sf "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
