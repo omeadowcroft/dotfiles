@@ -12,7 +12,14 @@ git clone git@github.com:omeadowcroft/dotfiles.git ~/dotfiles
 cd ~/dotfiles && ./setup.sh
 ```
 
-This will install all dependencies (tmux, neovim, gh, ripgrep, etc.), symlink the tmux config, and clone the neovim config.
+This will install all dependencies (tmux, neovim, gh, ripgrep, tree-sitter, etc.), symlink the tmux config, and clone the neovim config.
+
+After running the script, configure your git identity:
+
+```bash
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+```
 
 ## Manual tmux setup
 

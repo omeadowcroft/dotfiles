@@ -7,12 +7,33 @@ sudo apt install -y \
   git \
   curl \
   tmux \
-  neovim \
   ripgrep \
   gcc \
   make \
   unzip \
   wget
+
+echo "==> Installing Neovim (latest stable)..."
+if nvim --version 2>/dev/null | grep -q "^NVIM v0\.1[0-9]"; then
+  echo "    Neovim 0.10+ already installed, skipping"
+else
+  curl -fLo /tmp/nvim-linux-x86_64.tar.gz \
+    https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+  sudo rm -rf /opt/nvim-linux-x86_64
+  sudo tar -C /opt -xzf /tmp/nvim-linux-x86_64.tar.gz
+  sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+  rm /tmp/nvim-linux-x86_64.tar.gz
+fi
+
+echo "==> Installing tree-sitter CLI..."
+if command -v tree-sitter &>/dev/null; then
+  echo "    tree-sitter already installed, skipping"
+else
+  curl -fL https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz \
+    | gunzip > /tmp/tree-sitter
+  chmod +x /tmp/tree-sitter
+  sudo mv /tmp/tree-sitter /usr/local/bin/tree-sitter
+fi
 
 echo "==> Installing gh CLI..."
 if ! command -v gh &>/dev/null; then
