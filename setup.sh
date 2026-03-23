@@ -73,6 +73,11 @@ else
   git clone git@github.com:omeadowcroft/nvim-config.git ~/.config/nvim
 fi
 
+echo "==> Setting up Claude Code memory..."
+MEMORY_DEST="$HOME/.claude/projects/-home-oscar/memory"
+mkdir -p "$MEMORY_DEST"
+cp -n "$DOTFILES_DIR/claude-memory/"* "$MEMORY_DEST/" 2>/dev/null && echo "    Memory files restored." || echo "    Memory files already exist, skipping."
+
 echo ""
 echo "Done! Next steps:"
 echo "  1. Run 'gh auth login' to authenticate with GitHub (choose SSH)"
