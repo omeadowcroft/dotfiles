@@ -62,6 +62,10 @@ echo "==> Checking neovim config..."
 check_clean ~/.config/nvim "nvim config" && sync_repo ~/.config/nvim "nvim config"
 
 echo ""
+echo "==> Checking Claude memory..."
+check_clean ~/.claude-memory "claude memory" && sync_repo ~/.claude-memory "claude memory"
+
+echo ""
 echo "==> Checking Neovim version..."
 INSTALLED=$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+\.\d+' || echo "0.0.0")
 LATEST=$(curl -fsSL https://api.github.com/repos/neovim/neovim/releases/latest | grep '"tag_name"' | grep -oP '\d+\.\d+\.\d+')

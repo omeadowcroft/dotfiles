@@ -83,15 +83,20 @@ else
 fi
 
 echo "==> Setting up Claude memory..."
+if [ -d ~/.claude-memory/.git ]; then
+  echo "    Claude memory repo already exists, skipping"
+else
+  git clone git@github.com:omeadowcroft/claude-memory.git ~/.claude-memory
+fi
 MEMORY_KEY=$(echo "$DOTFILES_DIR" | sed 's|/|-|g')
 MEMORY_TARGET="$HOME/.claude/projects/$MEMORY_KEY/memory"
 mkdir -p "$(dirname "$MEMORY_TARGET")"
 if [ -L "$MEMORY_TARGET" ]; then
   echo "    Claude memory symlink already exists, skipping"
 elif [ -d "$MEMORY_TARGET" ]; then
-  echo "    WARNING: $MEMORY_TARGET exists as a real directory — back it up and replace with a symlink to $DOTFILES_DIR/claude-memory"
+  echo "    WARNING: $MEMORY_TARGET exists as a real directory — back it up and replace with a symlink to ~/.claude-memory"
 else
-  ln -sf "$DOTFILES_DIR/claude-memory" "$MEMORY_TARGET"
+  ln -sf "$HOME/.claude-memory" "$MEMORY_TARGET"
   echo "    Claude memory symlinked"
 fi
 
