@@ -80,14 +80,26 @@ else
   curl -fsSL https://claude.ai/install.sh | bash
 fi
 
-echo "==> Setting up Claude Code memory..."
-MEMORY_DEST="$HOME/.claude/projects/-home-oscar/memory"
-mkdir -p "$MEMORY_DEST"
-cp -n "$DOTFILES_DIR/claude-memory/"* "$MEMORY_DEST/" 2>/dev/null && echo "    Memory files restored." || echo "    Memory files already exist, skipping."
+echo "==> Setting up Claude memory..."
+MEMORY_KEY=$(echo "$DOTFILES_DIR" | sed 's|/|-|g')
+MEMORY_TARGET="$HOME/.claude/projects/$MEMORY_KEY/memory"
+mkdir -p "$(dirname "$MEMORY_TARGET")"
+if [ -L "$MEMORY_TARGET" ]; then
+  echo "    Claude memory symlink already exists, skipping"
+elif [ -d "$MEMORY_TARGET" ]; then
+  echo "    WARNING: $MEMORY_TARGET exists as a real directory — back it up and replace with a symlink to $DOTFILES_DIR/claude-memory"
+else
+  ln -sf "$DOTFILES_DIR/claude-memory" "$MEMORY_TARGET"
+  echo "    Claude memory symlinked"
+fi
 
 echo ""
 echo "Done! Next steps:"
 echo "  1. Run 'gh auth login' to authenticate with GitHub (choose SSH)"
-echo "  2. Open neovim — lazy.nvim will auto-install plugins on first launch"
-echo "  3. Run :Lazy sync inside neovim to ensure everything is up to date"
-echo "  4. Mason will auto-install LSP servers on first use"
+echo "  2. Configure git identity:"
+echo "       git config --global user.email 'you@example.com'"
+echo "       git config --global user.name 'Your Name'"
+echo "  3. Open neovim — lazy.nvim will auto-install plugins on first launch"
+echo "  4. Run :Lazy sync inside neovim to ensure everything is up to date"
+echo "  5. Mason will auto-install LSP servers on first use"
+echo "  6. Run ./update.sh any time to keep everything current"
