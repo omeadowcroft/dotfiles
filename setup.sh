@@ -73,6 +73,13 @@ else
   git clone git@github.com:omeadowcroft/nvim-config.git ~/.config/nvim
 fi
 
+echo "==> Installing Claude Code..."
+if command -v claude &>/dev/null; then
+  echo "    Claude Code already installed, skipping"
+else
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
 echo "==> Setting up Claude Code memory..."
 MEMORY_DEST="$HOME/.claude/projects/-home-oscar/memory"
 mkdir -p "$MEMORY_DEST"
