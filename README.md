@@ -45,12 +45,13 @@ rice-profile --force-monitors   # regenerate machine.lua from connected outputs
 `machine.lua` holds monitor rules and NVIDIA env vars (added automatically when an
 NVIDIA GPU is present), so the shared Hyprland config works on any GPU.
 
-The wallpaper is read from `~/Pictures/wallpapers/fallout-wallpaper-4k.png` if it
-exists; otherwise Hyprland's background colour (`#08170b`) shows.
+The wallpaper (the `wallpapers` package, linked into `~/Pictures/wallpapers/`) is a
+scanline pattern, so each profile gets a pixel-exact version rather than a
+resampled one: `fallout-wallpaper-4k.png` or `fallout-wallpaper-1080p.png`.
 
 ## Layout
 
-- `bash cursor fonts gtk hypr kitty tmux waybar/`: stow packages (stowed with `--no-folding`)
+- `bash cursor fonts gtk hypr kitty tmux wallpapers waybar/`: stow packages (stowed with `--no-folding`)
 - `scripts/rice-profile`: per-machine sizing
 - `system/`: installed with sudo (SDDM theme and config, GRUB themes, console fonts) and icon tarballs
 - `packages/`: full package lists from the desktop, for reference

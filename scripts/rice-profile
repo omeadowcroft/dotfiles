@@ -74,9 +74,9 @@ fi
 
 case "$profile" in
   4k)          font=17;    bar=36; grub=fallout-4k
-               tk=(17 13 22 18 16); launcher="700 420"; console=fallout-32x68 ;;
+               tk=(17 13 22 18 16); launcher="700 420"; console=fallout-32x68; wallres=4k ;;
   1440p|1080p) font=12.75; bar=27; grub=fallout-1080p
-               tk=(13 10 17 14 12); launcher="525 315"; console=fallout-16x34 ;;
+               tk=(13 10 17 14 12); launcher="525 315"; console=fallout-16x34; wallres=1080p ;;
 esac
 
 if [ "$print_only" = 1 ]; then
@@ -147,8 +147,8 @@ rounding_small = 0
 EOF
 printf 'ui {\n    window_size = %s\n}\n' "$launcher" > ~/.config/hypr/hyprlauncher.conf
 
-# hyprpaper: same wallpaper on every connected output (if you have it)
-wall=~/Pictures/wallpapers/fallout-wallpaper-4k.png
+# hyprpaper: scanline wallpaper matched to the resolution (scanlines must not be resampled)
+wall=~/Pictures/wallpapers/fallout-wallpaper-$wallres.png
 {
   echo "# written by rice-profile ($profile)"
   echo "splash = false"
