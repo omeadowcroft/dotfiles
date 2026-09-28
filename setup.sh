@@ -99,7 +99,7 @@ echo "==> Installing rice packages..."
 RICE_PKGS=(
   hyprland hyprlock hyprpaper hyprlauncher hyprshot uwsm
   xdg-desktop-portal-hyprland qt5-wayland qt6-wayland polkit-kde-agent
-  waybar swaync kitty dolphin fastfetch btop
+  waybar swaync kitty thunar tumbler fastfetch btop
   sddm grub os-prober efibootmgr
   adw-gtk-theme papirus-icon-theme gtk-update-icon-cache
   ttf-jetbrains-mono-nerd noto-fonts-emoji fontconfig
@@ -205,6 +205,9 @@ if [ "$NO_SYSTEM" = 0 ]; then
     echo "          sudo systemctl disable ${current_dm%.service} && sudo systemctl enable sddm"
   fi
 
+  echo "==> Installing console fonts..."
+  sudo install -Dm644 -t /usr/share/kbd/consolefonts "$DOTFILES_DIR"/system/consolefonts/*.psfu.gz
+
   echo "==> Installing GRUB theme ($RICE_GRUB_THEME)..."
   if [ -f /etc/default/grub ] && [ -d /boot/grub ]; then
     sudo mkdir -p /boot/grub/themes
@@ -248,7 +251,8 @@ fi
 echo ""
 echo "Done! Profile: $RICE_PROFILE (font ${RICE_FONT_PT}pt)."
 echo "  - Log out and back in (or reboot) to start Hyprland from SDDM."
-echo "  - Monitor layout: edit ~/.config/hypr/monitors-local.lua (per-machine, not in git)."
+echo "  - Monitors/GPU: ~/.config/hypr/machine.lua (per-machine, not in git)."
+echo "    On the desktop, run once: rice-profile --machine desktop"
 echo "  - Different display? Run: rice-profile [4k|1440p|1080p]"
 if [ "$RICE_ONLY" = 0 ]; then
   echo "  - Run 'gh auth login' (choose SSH), then set your git name/email."

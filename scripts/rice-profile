@@ -16,7 +16,8 @@
 #   rice-profile                 detect from the largest connected display
 #   rice-profile 4k|1440p|1080p  force a profile
 #   rice-profile --print         print the detected profile and exit
-#   --force-monitors             also rewrite ~/.config/hypr/monitors-local.lua
+#   --force-monitors             regenerate ~/.config/hypr/machine.lua
+#   --machine desktop            link machine.lua to hypr/machines/desktop.lua instead
 #
 # Everything written here is per-machine and lives OUTSIDE the git repo
 # (stow is run with --no-folding, so these are real files next to the symlinks).
@@ -24,15 +25,18 @@
 set -euo pipefail
 
 force_monitors=0
+machine=""
 profile=""
 print_only=0
 for a in "$@"; do
   case "$a" in
     4k|1440p|1080p) profile="$a" ;;
     --force-monitors) force_monitors=1 ;;
+    --machine) machine="__next__" ;;
     --print) print_only=1 ;;
-    -h|--help) sed -n '2,24p' "$0"; exit 0 ;;
-    *) echo "rice-profile: unknown argument '$a'" >&2; exit 1 ;;
+    -h|--help) sed -n '2,26p' "$0"; exit 0 ;;
+    *) if [ "$machine" = "__next__" ]; then machine="$a"
+       else echo "rice-profile: unknown argument '$a'" >&2; exit 1; fi ;;
   esac
 done
 
@@ -69,8 +73,10 @@ if [ -z "$profile" ]; then
 fi
 
 case "$profile" in
-  4k)          font=17;    bar=36; grub=fallout-4k ;;
-  1440p|1080p) font=12.75; bar=27; grub=fallout-1080p ;;
+  4k)          font=17;    bar=36; grub=fallout-4k
+               tk=(17 13 22 18 16); launcher="700 420"; console=fallout-32x68 ;;
+  1440p|1080p) font=12.75; bar=27; grub=fallout-1080p
+               tk=(13 10 17 14 12); launcher="525 315"; console=fallout-16x34 ;;
 esac
 
 if [ "$print_only" = 1 ]; then
@@ -89,6 +95,7 @@ RICE_PROFILE=$profile
 RICE_FONT_PT=$font
 RICE_BAR_HEIGHT=$bar
 RICE_GRUB_THEME=$grub
+RICE_CONSOLE_FONT=$console
 EOF
 
 # kitty
@@ -118,22 +125,71 @@ if command -v gsettings >/dev/null 2>&1; then
   gsettings set org.gnome.desktop.interface cursor-theme 'Fallout-Pixel' 2>/dev/null || true
 fi
 
-# Hyprland monitors: only generated once, so hand edits survive re-runs
-mon=~/.config/hypr/monitors-local.lua
-if [ -L "$mon" ]; then
-  echo "    $mon is a symlink (machine file), leaving it alone"
-elif [ ! -e "$mon" ] || [ "$force_monitors" = 1 ]; then
+# hyprtoolkit (hyprlauncher etc.) theme and launcher size
+cat > ~/.config/hypr/hyprtoolkit.conf <<EOF
+# Fallout terminal theme for hyprtoolkit apps. Written by rice-profile ($profile).
+background       = 0xFF07130B
+base             = 0xFF0B1F12
+alternate_base   = 0xFF0F2A18
+text             = 0xFF67D97A
+bright_text      = 0xFF9DFFAE
+accent           = 0xFF67D97A
+accent_secondary = 0xFF2F8A45
+font_family           = Fixedsys Excelsior
+font_family_monospace = Fixedsys Excelsior
+font_size       = ${tk[0]}
+small_font_size = ${tk[1]}
+h1_size = ${tk[2]}
+h2_size = ${tk[3]}
+h3_size = ${tk[4]}
+rounding_large = 0
+rounding_small = 0
+EOF
+printf 'ui {\n    window_size = %s\n}\n' "$launcher" > ~/.config/hypr/hyprlauncher.conf
+
+# hyprpaper: same wallpaper on every connected output (if you have it)
+wall=~/Pictures/wallpapers/fallout-wallpaper-4k.png
+{
+  echo "# written by rice-profile ($profile)"
+  echo "splash = false"
+  if [ -f "$wall" ]; then
+    while read -r name _; do
+      [ -n "$name" ] && printf 'wallpaper {\n    monitor = %s\n    path = %s\n    fit_mode = cover\n}\n' "$name" "$wall"
+    done <<<"$outputs"
+  else
+    echo "# no $wall on this machine; Hyprland's background colour shows instead"
+  fi
+} > ~/.config/hypr/hyprpaper.conf
+
+# Hyprland machine file (monitors + GPU env). Generated once so hand edits survive.
+mf=~/.config/hypr/machine.lua
+if [ -n "$machine" ]; then
+  src=~/.config/hypr/machines/$machine.lua
+  [ -f "$src" ] || { echo "rice-profile: no such machine file: $src" >&2; exit 1; }
+  [ -e "$mf" ] && [ ! -L "$mf" ] && mv "$mf" "$mf.bak"
+  ln -sfn "machines/$machine.lua" "$mf"
+  echo "    machine.lua -> machines/$machine.lua"
+elif [ -L "$mf" ]; then
+  echo "    machine.lua links to $(readlink "$mf"), leaving it alone"
+elif [ ! -e "$mf" ] || [ "$force_monitors" = 1 ]; then
   {
-    echo "-- written by rice-profile ($profile). Per-machine, not tracked in git: edit freely."
-    echo "-- Check output names with: hyprctl monitors"
+    echo "-- written by rice-profile ($profile). Per-machine, not in git: edit freely."
+    echo "-- Output names: hyprctl monitors. Add mode = \"WxH@Hz\" to pin a refresh rate."
     while read -r name w h; do
       [ -n "$name" ] || continue
       echo "hl.monitor({ output = \"$name\", mode = \"preferred\", position = \"auto\", scale = $(scale_for_height "$h") })"
     done <<<"$outputs"
-  } > "$mon"
-  echo "    wrote $mon"
+    if [ -e /proc/driver/nvidia/version ] || lspci 2>/dev/null | grep -qiE '(vga|3d).*nvidia'; then
+      echo
+      echo "-- NVIDIA GPU detected"
+      echo 'hl.env("LIBVA_DRIVER_NAME", "nvidia")'
+      echo 'hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")'
+      echo 'hl.env("WLR_NO_HARDWARE_CURSORS", "1")'
+    fi
+  } > "$mf"
+  echo "    wrote $mf"
 else
-  echo "    $mon exists, keeping it (use --force-monitors to regenerate)"
+  echo "    $mf exists, keeping it (--force-monitors to regenerate)"
 fi
 
 # apply live if we're inside a session

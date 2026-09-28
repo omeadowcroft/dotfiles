@@ -1,4 +1,4 @@
 terminal = "kitty"
-fileManager = "dolphin"
+fileManager = "thunar"
 menu = "hyprlauncher"
 mainMod = "SUPER"

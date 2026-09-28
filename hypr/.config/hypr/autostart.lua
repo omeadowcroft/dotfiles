@@ -1,5 +1,6 @@
 hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("sleep 3 && hyprctl hyprpaper wallpaper \"DP-2,/home/oscar/wallpapers/black.png\"")
+    hl.exec_cmd("kitty --class scratchpad", { workspace = "special:magic silent" })
+    hl.exec_cmd("waybar")
 end)

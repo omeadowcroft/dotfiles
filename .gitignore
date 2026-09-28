@@ -1,4 +1,8 @@
 .claude/
-# per-machine files written by scripts/rice-profile
-hypr/.config/hypr/monitors-local.lua
 *.bak
+# per-machine files written by scripts/rice-profile (they live in ~/.config, but
+# guard against a folded ~/.config/hypr symlink writing them into the repo)
+hypr/.config/hypr/machine.lua
+hypr/.config/hypr/hyprpaper.conf
+hypr/.config/hypr/hyprtoolkit.conf
+hypr/.config/hypr/hyprlauncher.conf

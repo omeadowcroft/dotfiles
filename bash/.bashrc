@@ -16,4 +16,6 @@ if [ "$TERM" = "linux" ]; then
     clear
 fi
 
-[ "$TERM" = "linux" ] && setfont fallout-32x68 2>/dev/null
+# Console font sized for this machine's display (scripts/rice-profile)
+[ -r ~/.config/rice/profile ] && . ~/.config/rice/profile
+[ "$TERM" = "linux" ] && setfont "${RICE_CONSOLE_FONT:-fallout-16x34}" 2>/dev/null

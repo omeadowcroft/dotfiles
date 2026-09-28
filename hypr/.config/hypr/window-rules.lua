@@ -37,3 +37,13 @@ hl.window_rule({
     move = "20 monitor_h-120",
     float = true,
 })
+
+-- Drop-down terminal living in the magic scratchpad
+hl.window_rule({
+    name = "scratchpad-terminal",
+    match = { class = "^scratchpad$" },
+    float = true,
+    center = true,
+    size = { "monitor_w * 0.6", "monitor_h * 0.6" },
+    workspace = "special:magic silent",
+})

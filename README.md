@@ -1,48 +1,62 @@
 # dotfiles
 
-Personal dotfiles for tmux (and other tools).
+Arch + Hyprland, themed as a green-phosphor Fallout terminal: kitty, Pip-Boy
+Waybar, GTK, Fixedsys Excelsior everywhere, Papirus-Fallout icons, Fallout-Pixel
+cursor, an SDDM terminal login and a GRUB theme. Plus tmux and dev tools.
 
-## Setup
-
-On a new machine, run:
+## New machine
 
 ```bash
-sudo apt install git
-git clone git@github.com:omeadowcroft/dotfiles.git ~/dotfiles
+sudo pacman -S --needed git
+git clone https://github.com/omeadowcroft/dotfiles.git ~/dotfiles
 cd ~/dotfiles && ./setup.sh
 ```
 
-This will install all dependencies (tmux, neovim, gh, ripgrep, tree-sitter, etc.), symlink the tmux config, and clone the neovim config.
+`./setup.sh --rice-only` skips the dev tools (Neovim config, Claude Code,
+ExpressVPN). `--no-system` skips the sudo parts (SDDM, GRUB, console fonts).
+Anything the script replaces is moved to `~/.dotfiles-backup/<timestamp>/`.
 
-After running the script, configure your git identity:
+## Scaling (4K / 1440p / 1080p)
+
+`scripts/rice-profile` (linked to `~/.local/bin`) detects the largest connected
+display and writes per-machine files that are **not** in git:
+
+| profile | monitor scale | font | Waybar height | GRUB theme | console font |
+|---|---|---|---|---|---|
+| 4k | 1.5 | 17pt (34 px) | 36 | fallout-4k | fallout-32x68 |
+| 1440p | 1 | 12.75pt (17 px) | 27 | fallout-1080p | fallout-16x34 |
+| 1080p | 1 | 12.75pt (17 px) | 27 | fallout-1080p | fallout-16x34 |
+
+Fixedsys is only crisp at multiples of 17 physical pixels, which is where these
+numbers come from; 4K and 1080p end up with the same text size relative to the
+screen. The SDDM theme scales itself.
+
+Generated files: `~/.config/hypr/{machine.lua,hyprpaper.conf,hyprtoolkit.conf,hyprlauncher.conf}`,
+`~/.config/kitty/local.conf`, `~/.config/waybar/local.{jsonc,css}`,
+`~/.config/gtk-{3,4}.0/settings.ini`, `~/.config/rice/profile`.
 
 ```bash
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
+rice-profile                    # re-detect
+rice-profile 1080p              # force a profile
+rice-profile --machine desktop  # use hypr/.config/hypr/machines/desktop.lua as machine.lua
+rice-profile --force-monitors   # regenerate machine.lua from connected outputs
 ```
 
-## Manual tmux setup
+`machine.lua` holds monitor rules and NVIDIA env vars (added automatically when an
+NVIDIA GPU is present), so the shared Hyprland config works on any GPU.
 
-If you just want the tmux config:
+The wallpaper is read from `~/Pictures/wallpapers/fallout-wallpaper-4k.png` if it
+exists; otherwise Hyprland's background colour (`#08170b`) shows.
 
-1. Install tmux:
-   ```bash
-   sudo apt install tmux
-   ```
+## Layout
 
-2. Clone this repo and symlink the config:
-   ```bash
-   git clone git@github.com:omeadowcroft/dotfiles.git ~/dotfiles
-   ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
-   ```
+- `bash cursor fonts gtk hypr kitty tmux waybar/`: stow packages (stowed with `--no-folding`)
+- `scripts/rice-profile`: per-machine sizing
+- `system/`: installed with sudo (SDDM theme and config, GRUB themes, console fonts) and icon tarballs
+- `packages/`: full package lists from the desktop, for reference
 
-3. Reload tmux config:
-   ```bash
-   tmux source ~/.tmux.conf
-   ```
-
-## Key bindings
+## tmux
 
 - Prefix: `Ctrl+A`
-- `Prefix + x` — kill pane
-- `Prefix + [` — enter copy/scroll mode (use arrow keys or `j/k` to scroll, `q` to exit)
+- `Prefix + x`: kill pane
+- `Prefix + [`: copy/scroll mode (`q` to exit)

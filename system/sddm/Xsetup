@@ -1,0 +1,6 @@
+#!/bin/sh
+# Match Hyprland's mode so the monitor doesn't re-sync at login.
+# 4K@240 on the desktop; any other display just uses its preferred mode.
+for o in $(xrandr | awk '/ connected/{print $1}'); do
+    xrandr --output "$o" --mode 3840x2160 --rate 240 2>/dev/null || xrandr --output "$o" --auto
+done
