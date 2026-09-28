@@ -1,7 +1,7 @@
 # dotfiles
 
 Arch + Hyprland, themed as a green-phosphor Fallout terminal: kitty, Pip-Boy
-Waybar, GTK, Fixedsys Excelsior everywhere, Papirus-Fallout icons, Fallout-Pixel
+Waybar, Pip-Boy notifications (swaync), GTK, Fixedsys Excelsior everywhere, Papirus-Fallout icons, Fallout-Pixel
 cursor, an SDDM terminal login and a GRUB theme. Plus tmux and dev tools.
 
 ## New machine
@@ -32,7 +32,7 @@ numbers come from; 4K and 1080p end up with the same text size relative to the
 screen. The SDDM theme scales itself.
 
 Generated files: `~/.config/hypr/{machine.lua,hyprpaper.conf,hyprtoolkit.conf,hyprlauncher.conf}`,
-`~/.config/kitty/local.conf`, `~/.config/waybar/local.{jsonc,css}`,
+`~/.config/kitty/local.conf`, `~/.config/waybar/local.{jsonc,css}`, `~/.config/swaync/local.css`,
 `~/.config/gtk-{3,4}.0/settings.ini`, `~/.config/rice/profile`.
 
 ```bash
@@ -51,10 +51,16 @@ resampled one: `fallout-wallpaper-4k.png` or `fallout-wallpaper-1080p.png`.
 
 ## Layout
 
-- `bash cursor fonts gtk hypr kitty tmux wallpapers waybar/`: stow packages (stowed with `--no-folding`)
+- `bash cursor fonts gtk hypr kitty swaync tmux wallpapers waybar/`: stow packages (stowed with `--no-folding`)
 - `scripts/rice-profile`: per-machine sizing
 - `system/`: installed with sudo (SDDM theme and config, GRUB themes, console fonts) and icon tarballs
 - `packages/`: full package lists from the desktop, for reference
+
+## Notifications
+
+swaync, started by Hyprland. `Super+N` opens the notification centre (history,
+Clear, Do Not Disturb). Popups use the same bracketed panel style as Waybar;
+critical ones are amber.
 
 ## tmux
 

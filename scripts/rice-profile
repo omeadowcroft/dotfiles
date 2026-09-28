@@ -86,7 +86,7 @@ fi
 
 echo "==> rice-profile: $profile (font ${font}pt, bar ${bar}px)"
 
-mkdir -p ~/.config/rice ~/.config/hypr ~/.config/kitty ~/.config/waybar \
+mkdir -p ~/.config/rice ~/.config/hypr ~/.config/kitty ~/.config/waybar ~/.config/swaync \
          ~/.config/gtk-3.0 ~/.config/gtk-4.0
 
 cat > ~/.config/rice/profile <<EOF
@@ -104,6 +104,10 @@ printf '# written by rice-profile (%s)\nfont_size %s\n' "$profile" "$font" > ~/.
 # waybar
 printf '// written by rice-profile (%s)\n{ "height": %s }\n' "$profile" "$bar" > ~/.config/waybar/local.jsonc
 printf '/* written by rice-profile (%s) */\n* { font-size: %spt; }\n' "$profile" "$font" > ~/.config/waybar/local.css
+
+# swaync (notifications): same Fixedsys size as the bar
+printf '/* written by rice-profile (%s) */\n:root {\n  --font-size-body: %spt;\n  --font-size-summary: %spt;\n}\n' \
+  "$profile" "$font" "$font" > ~/.config/swaync/local.css
 
 # GTK 3 and 4
 for v in 3.0 4.0; do
@@ -195,4 +199,5 @@ fi
 # apply live if we're inside a session
 if pgrep -x waybar >/dev/null 2>&1; then pkill -SIGUSR2 waybar || true; fi
 if pgrep -x kitty  >/dev/null 2>&1; then pkill -SIGUSR1 kitty  || true; fi
+if pgrep -x swaync >/dev/null 2>&1; then swaync-client --reload-css >/dev/null 2>&1 || true; fi
 if command -v hyprctl >/dev/null 2>&1 && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then hyprctl reload >/dev/null || true; fi

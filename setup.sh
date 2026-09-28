@@ -118,7 +118,7 @@ fi
 # =============================================================================
 # Rice: symlink configs with stow
 # =============================================================================
-STOW_PKGS=(bash cursor fonts gtk hypr kitty tmux wallpapers waybar)
+STOW_PKGS=(bash cursor fonts gtk hypr kitty swaync tmux wallpapers waybar)
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
 # Move anything in the way to BACKUP_DIR, and undo old "folded" directory

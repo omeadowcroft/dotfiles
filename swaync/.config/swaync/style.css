@@ -1,0 +1,196 @@
+/* Pip-Boy notifications for swaync.
+   Layered on top of swaync's packaged style (swaync always loads that first),
+   so this file only changes colours, borders, fonts and corners.
+   Palette matches Waybar: bg #08170b  panel #0b1d0f  hover #12301b  line #1f4a2a
+                           dim #2f8a45  text #67d97a  bright #9dffae  amber #e0a33a */
+
+/* per-machine font size, written by scripts/rice-profile (not in git) */
+@import url("local.css");
+
+:root {
+  --cc-bg: #08170b;
+  --noti-border-color: #67d97a;
+  --noti-bg: 8, 23, 11;
+  --noti-bg-alpha: 0.96;
+  --noti-bg-darker: #0b1d0f;
+  --noti-bg-hover: #12301b;
+  --noti-bg-focus: rgba(18, 48, 27, 0.6);
+  --noti-close-bg: #08170b;
+  --noti-close-bg-hover: #67d97a;
+  --text-color: #67d97a;
+  --text-color-disabled: #2f8a45;
+  --bg-selected: #67d97a;
+  --border: 1px solid #2f8a45;
+  --border-radius: 0;
+  --notification-shadow: none;
+  --notification-icon-size: 48px;
+}
+
+* {
+  font-family: "Fixedsys Excelsior", monospace;
+  font-size: var(--font-size-body);
+  font-weight: normal;          /* synthetic bold smears a bitmap font */
+  text-shadow: none;
+  -gtk-icon-shadow: none;
+}
+
+
+/* ---------- Popup notification: a Waybar-style bracketed panel ---------- */
+
+.notification-row .notification-background .notification {
+  background: rgba(8, 23, 11, 0.96);
+  border-style: solid;
+  border-color: #67d97a;
+  border-width: 2px 3px 2px 3px;
+  border-bottom-color: #2f8a45;
+  border-radius: 0;
+  box-shadow: none;
+}
+.notification-row .notification-background .notification.low {
+  border-color: #2f8a45;
+}
+.notification-row .notification-background .notification.critical {
+  border-color: #e0a33a;
+}
+
+.notification-row .notification-background .notification .notification-default-action {
+  border-radius: 0;
+}
+.notification-row .notification-background .notification .notification-default-action:hover {
+  background: #12301b;
+}
+
+/* text */
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
+  color: #9dffae;
+  font-size: var(--font-size-summary);
+  font-weight: normal;
+}
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time {
+  color: #2f8a45;
+  font-size: var(--font-size-body);
+  font-weight: normal;
+}
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .body {
+  color: #67d97a;
+}
+.notification-row .notification-background .notification.critical .notification-default-action .notification-content .text-box .summary {
+  color: #e0a33a;
+}
+
+/* icons: square, no rounding or glow */
+.notification-row .notification-background .notification .notification-default-action .notification-content .image {
+  border-radius: 0;
+}
+
+/* progress bar (volume/brightness OSDs, downloads) */
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar trough {
+  background: #1f4a2a;
+  border: none;
+  border-radius: 0;
+  min-height: 6px;
+}
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar progress {
+  background: #67d97a;
+  border: none;
+  border-radius: 0;
+  min-height: 6px;
+}
+
+/* action buttons under the message */
+.notification-row .notification-background .notification .notification-action > button {
+  background: #0b1d0f;
+  color: #67d97a;
+  border: 1px solid #2f8a45;
+  border-radius: 0;
+  box-shadow: none;
+}
+.notification-row .notification-background .notification .notification-action > button:hover {
+  background: #12301b;
+  color: #9dffae;
+  border-color: #67d97a;
+}
+
+
+/* ---------- Close button: square, inverts on hover ---------- */
+
+.close-button {
+  background: #08170b;
+  color: #67d97a;
+  border: 1px solid #67d97a;
+  border-radius: 0;
+  box-shadow: none;
+}
+.close-button:hover {
+  background: #67d97a;
+  color: #08170b;
+  border: 1px solid #67d97a;
+}
+
+
+/* ---------- Control centre (Super+N) ---------- */
+
+.control-center {
+  background: #08170b;
+  color: #67d97a;
+  border-style: solid;
+  border-color: #67d97a;
+  border-width: 2px 3px 2px 3px;
+  border-radius: 0;
+}
+.control-center .control-center-list-placeholder {
+  color: #2f8a45;
+  opacity: 1;
+}
+
+.control-center .widget {
+  border-radius: 0;
+}
+
+/* title row: "NOTIFICATIONS" + CLEAR */
+.control-center .widget-title > label,
+.control-center .widget-inhibitors > label {
+  color: #9dffae;
+  font-size: var(--font-size-summary);
+}
+.control-center .widget-title > button,
+.control-center .widget-inhibitors > button {
+  background: transparent;
+  color: #67d97a;
+  border: 1px solid #67d97a;
+  border-radius: 0;
+  box-shadow: none;
+}
+.control-center .widget-title > button:hover,
+.control-center .widget-inhibitors > button:hover {
+  background: #67d97a;
+  color: #08170b;
+}
+
+/* do-not-disturb switch */
+.control-center .widget-dnd label {
+  color: #67d97a;
+  font-size: var(--font-size-body);
+}
+.control-center .widget-dnd switch {
+  background: #0b1d0f;
+  border: 1px solid #2f8a45;
+  border-radius: 0;
+  box-shadow: none;
+}
+.control-center .widget-dnd switch:checked {
+  background: #2f8a45;
+}
+.control-center .widget-dnd switch slider {
+  background: #67d97a;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* grouped notifications */
+.notification-group .notification-group-headers,
+.notification-group .notification-group-headers .notification-group-header,
+.notification-group .notification-group-buttons {
+  color: #9dffae;
+}
