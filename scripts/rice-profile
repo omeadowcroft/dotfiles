@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+# rice-profile: size the Fallout rice for this machine's display.
+#
+# Fixedsys Excelsior is only pixel-exact at multiples of 17 physical pixels,
+# so every size here is chosen to land on that grid:
+#
+#   profile  monitor scale  font (pt)  physical font px  bar height (logical)
+#   4k       1.5            17         34                36
+#   1080p    1              12.75      17                27
+#   1440p    1              12.75      17                27   (no exact option between 17 and 34 px)
+#
+# Both 4k and 1080p give the same text size relative to screen height, so the
+# rice looks identical on the desktop and the laptop.
+#
+# Usage:
+#   rice-profile                 detect from the largest connected display
+#   rice-profile 4k|1440p|1080p  force a profile
+#   rice-profile --print         print the detected profile and exit
+#   --force-monitors             also rewrite ~/.config/hypr/monitors-local.lua
+#
+# Everything written here is per-machine and lives OUTSIDE the git repo
+# (stow is run with --no-folding, so these are real files next to the symlinks).
+
+set -euo pipefail
+
+force_monitors=0
+profile=""
+print_only=0
+for a in "$@"; do
+  case "$a" in
+    4k|1440p|1080p) profile="$a" ;;
+    --force-monitors) force_monitors=1 ;;
+    --print) print_only=1 ;;
+    -h|--help) sed -n '2,24p' "$0"; exit 0 ;;
+    *) echo "rice-profile: unknown argument '$a'" >&2; exit 1 ;;
+  esac
+done
+
+# ---- detect connected outputs from sysfs (works before Hyprland is running) ----
+# prints "<output> <width> <height>" per connected output
+list_outputs() {
+  local d name mode
+  for d in /sys/class/drm/card*-*; do
+    [ -f "$d/status" ] || continue
+    [ "$(cat "$d/status")" = "connected" ] || continue
+    mode=$(head -n1 "$d/modes" 2>/dev/null || true)   # first mode = preferred
+    [ -n "$mode" ] || continue
+    name=${d##*/}; name=${name#card*-}                  # card1-eDP-1 -> eDP-1
+    echo "$name ${mode%%x*} ${mode##*x}"
+  done
+}
+
+profile_for_height() {
+  if   [ "$1" -ge 2160 ]; then echo 4k
+  elif [ "$1" -ge 1440 ]; then echo 1440p
+  else                         echo 1080p
+  fi
+}
+
+scale_for_height() {
+  if [ "$1" -ge 2160 ]; then echo 1.5; else echo 1; fi
+}
+
+outputs=$(list_outputs)
+if [ -z "$profile" ]; then
+  maxh=$(awk '{ if ($3 > m) m = $3 } END { print m + 0 }' <<<"$outputs")
+  [ "$maxh" -gt 0 ] || maxh=1080
+  profile=$(profile_for_height "$maxh")
+fi
+
+case "$profile" in
+  4k)          font=17;    bar=36; grub=fallout-4k ;;
+  1440p|1080p) font=12.75; bar=27; grub=fallout-1080p ;;
+esac
+
+if [ "$print_only" = 1 ]; then
+  echo "profile=$profile font=$font bar=$bar grub=$grub"
+  exit 0
+fi
+
+echo "==> rice-profile: $profile (font ${font}pt, bar ${bar}px)"
+
+mkdir -p ~/.config/rice ~/.config/hypr ~/.config/kitty ~/.config/waybar \
+         ~/.config/gtk-3.0 ~/.config/gtk-4.0
+
+cat > ~/.config/rice/profile <<EOF
+# written by rice-profile; read by setup.sh
+RICE_PROFILE=$profile
+RICE_FONT_PT=$font
+RICE_BAR_HEIGHT=$bar
+RICE_GRUB_THEME=$grub
+EOF
+
+# kitty
+printf '# written by rice-profile (%s)\nfont_size %s\n' "$profile" "$font" > ~/.config/kitty/local.conf
+
+# waybar
+printf '// written by rice-profile (%s)\n{ "height": %s }\n' "$profile" "$bar" > ~/.config/waybar/local.jsonc
+printf '/* written by rice-profile (%s) */\n* { font-size: %spt; }\n' "$profile" "$font" > ~/.config/waybar/local.css
+
+# GTK 3 and 4
+for v in 3.0 4.0; do
+  cat > ~/.config/gtk-$v/settings.ini <<EOF
+[Settings]
+gtk-theme-name=adw-gtk3-dark
+gtk-application-prefer-dark-theme=1
+gtk-font-name=Fixedsys Excelsior $font
+gtk-icon-theme-name=Papirus-Fallout-Pixel
+gtk-cursor-theme-name=Fallout-Pixel
+gtk-cursor-theme-size=24
+EOF
+done
+if command -v gsettings >/dev/null 2>&1; then
+  gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark' 2>/dev/null || true
+  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
+  gsettings set org.gnome.desktop.interface font-name "Fixedsys Excelsior $font" 2>/dev/null || true
+  gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Fallout-Pixel' 2>/dev/null || true
+  gsettings set org.gnome.desktop.interface cursor-theme 'Fallout-Pixel' 2>/dev/null || true
+fi
+
+# Hyprland monitors: only generated once, so hand edits survive re-runs
+mon=~/.config/hypr/monitors-local.lua
+if [ -L "$mon" ]; then
+  echo "    $mon is a symlink (machine file), leaving it alone"
+elif [ ! -e "$mon" ] || [ "$force_monitors" = 1 ]; then
+  {
+    echo "-- written by rice-profile ($profile). Per-machine, not tracked in git: edit freely."
+    echo "-- Check output names with: hyprctl monitors"
+    while read -r name w h; do
+      [ -n "$name" ] || continue
+      echo "hl.monitor({ output = \"$name\", mode = \"preferred\", position = \"auto\", scale = $(scale_for_height "$h") })"
+    done <<<"$outputs"
+  } > "$mon"
+  echo "    wrote $mon"
+else
+  echo "    $mon exists, keeping it (use --force-monitors to regenerate)"
+fi
+
+# apply live if we're inside a session
+if pgrep -x waybar >/dev/null 2>&1; then pkill -SIGUSR2 waybar || true; fi
+if pgrep -x kitty  >/dev/null 2>&1; then pkill -SIGUSR1 kitty  || true; fi
+if command -v hyprctl >/dev/null 2>&1 && [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then hyprctl reload >/dev/null || true; fi

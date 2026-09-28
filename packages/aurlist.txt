@@ -1,0 +1,8 @@
+brave-bin
+debtap
+expressvpn
+minecraft-launcher
+miniconda3
+waypaper
+yay
+yay-debug

@@ -1,1 +1,4 @@
 .claude/
+# per-machine files written by scripts/rice-profile
+hypr/.config/hypr/monitors-local.lua
+*.bak

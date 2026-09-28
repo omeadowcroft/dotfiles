@@ -1,0 +1,83 @@
+/* per-machine font size, written by scripts/rice-profile (not in git) */
+@import "local.css";
+
+/* Pip-Boy Waybar - Fallout terminal palette */
+* {
+  font-family: "Fixedsys Excelsior", "JetBrainsMono Nerd Font", monospace;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+window#waybar {
+  background: #08170b;
+  color: #67d97a;
+  border-bottom: 2px solid #2f8a45;
+}
+
+/* the three bracketed panels */
+#stats, #special, #skills {
+  border-top: 2px solid #67d97a;
+  border-left: 3px solid #67d97a;
+  border-right: 3px solid #67d97a;
+  margin: 4px 8px 0 8px;
+  padding: 0 12px;
+}
+
+#custom-stats-label, #custom-skills-label {
+  color: #9dffae;
+  font-weight: bold;
+  padding-right: 14px;
+}
+
+#custom-hp, #custom-ap, #custom-xp, #custom-rad,
+#pulseaudio, #network, #clock, #custom-lock {
+  color: #67d97a;
+  padding: 0 9px;
+}
+
+#custom-rad {
+  border-left: 3px solid #67d97a;
+  margin-left: 6px;
+  padding-left: 14px;
+}
+
+#pulseaudio.muted, #network.disconnected { color: #e0a33a; }
+
+/* S.P.E.C.I.A.L. workspaces */
+#workspaces button {
+  color: #2f8a45;
+  background: transparent;
+  padding: 0 10px;
+  border-bottom: 3px solid transparent;
+}
+#workspaces button.active {
+  color: #9dffae;
+  border-bottom: 3px solid #67d97a;
+}
+#workspaces button.urgent { color: #e0a33a; }
+#workspaces button:hover {
+  background: #0f2614;
+  color: #9dffae;
+}
+
+tooltip {
+  background: #0b1d0f;
+  border: 2px solid #67d97a;
+}
+tooltip label { color: #67d97a; }
+/* PIPBOY-TABS */
+#custom-ws1, #custom-ws2, #custom-ws3, #custom-ws4, #custom-ws5, #custom-ws6, #custom-ws7, #custom-ws8, #custom-ws9, #custom-ws10 {
+  color: #2f8a45;
+  padding: 0 10px;
+  border-bottom: 3px solid transparent;
+}
+#custom-ws1.occupied, #custom-ws2.occupied, #custom-ws3.occupied, #custom-ws4.occupied, #custom-ws5.occupied, #custom-ws6.occupied, #custom-ws7.occupied, #custom-ws8.occupied, #custom-ws9.occupied, #custom-ws10.occupied { color: #67d97a; }
+#custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active, #custom-ws6.active, #custom-ws7.active, #custom-ws8.active, #custom-ws9.active, #custom-ws10.active {
+  color: #9dffae;
+  border-bottom: 3px solid #67d97a;
+}
+#custom-ws1:hover, #custom-ws2:hover, #custom-ws3:hover, #custom-ws4:hover, #custom-ws5:hover, #custom-ws6:hover, #custom-ws7:hover, #custom-ws8:hover, #custom-ws9:hover, #custom-ws10:hover { background: #0f2614; color: #9dffae; }
+#custom-ws-watch { padding: 0; margin: 0; }
