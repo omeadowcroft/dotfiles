@@ -1,0 +1,8 @@
+require("variables")
+require("monitors")
+require("autostart")
+require("environment")
+require("aesthetics")
+require("input-rules")
+require("keybindings")
+require("window-rules")
