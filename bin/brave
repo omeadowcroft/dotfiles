@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+rice=$(cat "$HOME/.local/state/rice-active" 2>/dev/null || echo pip)
+case "$rice" in
+  light) profile="Profile 2" ;;
+  *)   profile="Default" ;;
+esac
+real=$(type -ap brave | grep -vx "$HOME/.local/bin/brave" | head -1)
+exec "$real" --profile-directory="$profile" "$@"

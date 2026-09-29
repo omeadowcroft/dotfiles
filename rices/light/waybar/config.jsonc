@@ -1,0 +1,208 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 40,
+  "margin-top": 16,
+  "margin-left": 20,
+  "margin-right": 20,
+  "spacing": 0,
+  "modules-left": [
+    "group/stats"
+  ],
+  "modules-center": [
+    "group/desktops"
+  ],
+  "modules-right": [
+    "group/status"
+  ],
+  "group/stats": {
+    "orientation": "horizontal",
+    "modules": [
+      "cpu",
+      "memory",
+      "disk",
+      "temperature"
+    ]
+  },
+  "group/status": {
+    "orientation": "horizontal",
+    "modules": [
+      "pulseaudio",
+      "network",
+      "clock",
+      "custom/lock"
+    ]
+  },
+  "cpu": {
+    "format": "<span color='#cba6f7'>󰻠</span> {usage}%",
+    "interval": 2,
+    "tooltip": false
+  },
+  "memory": {
+    "format": "<span color='#89b4fa'>󰍛</span> {percentage}%",
+    "interval": 5,
+    "tooltip-format": "{used:0.1f} / {total:0.1f} GiB"
+  },
+  "disk": {
+    "format": "<span color='#94e2d5'>󰋊</span> {percentage_used}%",
+    "path": "/",
+    "interval": 60,
+    "tooltip-format": "{used} / {total}"
+  },
+  "temperature": {
+    "format": "<span color='#fab387'>󰔏</span> {temperatureC}°",
+    "critical-threshold": 85,
+    "interval": 5,
+    "tooltip": false
+  },
+  "pulseaudio": {
+    "format": "<span color='#a6e3a1'>{icon}</span> {volume}%",
+    "format-muted": "<span color='#6c7086'>󰝟</span> Muted",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "Volume {volume}%"
+  },
+  "network": {
+    "format-ethernet": "<span color='#89dceb'>󰈀</span> Wired",
+    "format-wifi": "<span color='#89dceb'>󰖩</span> {essid}",
+    "format-disconnected": "<span color='#f38ba8'>󰖪</span> Offline",
+    "tooltip-format": "{ifname} · {ipaddr}",
+    "interval": 10
+  },
+  "clock": {
+    "format": "<span color='#f9e2af'>󰃭</span> {:%a %d %b  %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "interval": 30
+  },
+  "custom/lock": {
+    "format": "<span color='#f38ba8'>󰌾</span>",
+    "tooltip-format": "Lock",
+    "on-click": "loginctl lock-session"
+  },
+  "custom/ws1": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 1",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws2": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 2",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws3": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 3",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws4": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 4",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws5": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 5",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws6": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 6",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 6 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws7": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 7",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 7 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws8": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 8",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 8 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws9": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 9",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 9 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws10": {
+    "exec": "$HOME/.config/waybar/scripts/ws.py 10",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 10 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws-watch": {
+    "exec": "$HOME/.config/waybar/scripts/ws-watch.py",
+    "tooltip": false
+  },
+  "group/desktops": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/ws1",
+      "custom/ws2",
+      "custom/ws3",
+      "custom/ws4",
+      "custom/ws5",
+      "custom/ws6",
+      "custom/ws7",
+      "custom/ws8",
+      "custom/ws9",
+      "custom/ws10",
+      "custom/ws-watch"
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+set -euo pipefail
+name="${1:?usage: rice <name>}"
+src="$HOME/rices/$name"
+[ -d "$src" ] || { echo "no such rice: $name"; exit 1; }
+
+for d in "$src"/*/; do
+  d="${d%/}"
+  ln -sfn "$d" "$HOME/.config/$(basename "$d")"
+done
+
+sddm="$src/.system/sddm"
+if [ -d "$sddm" ]; then
+  if [ -d "$sddm/themes" ]; then
+    for t in "$sddm"/themes/*/; do
+      t="${t%/}"
+      sudo rm -rf "/usr/share/sddm/themes/$(basename "$t")"
+      sudo cp -r "$t" /usr/share/sddm/themes/
+    done
+  fi
+  sudo mkdir -p /etc/sddm.conf.d
+  [ -d "$sddm/conf.d" ] && sudo cp "$sddm"/conf.d/*.conf /etc/sddm.conf.d/
+  [ -f "$sddm/Xsetup" ] && sudo install -Dm755 "$sddm/Xsetup" /etc/sddm/Xsetup
+fi
+
+# cursor theme (one name per rice; empty file = system default)
+cur=""
+if [ -f "$src/.system/cursor" ]; then
+  cur=$(cat "$src/.system/cursor")
+  if [ -n "$cur" ]; then
+    for f in ~/.icons/default/index.theme ~/.local/share/icons/default/index.theme; do
+      mkdir -p "$(dirname "$f")"
+      printf '[Icon Theme]\nInherits=%s\n' "$cur" > "$f"
+    done
+    gsettings set org.gnome.desktop.interface cursor-theme "$cur"
+  else
+    rm -f ~/.icons/default/index.theme ~/.local/share/icons/default/index.theme
+    gsettings reset org.gnome.desktop.interface cursor-theme
+  fi
+fi
+
+# interface font (one name per rice; empty file = system default)
+if [ -f "$src/.system/font" ]; then
+  font=$(cat "$src/.system/font")
+  if [ -n "$font" ]; then
+    gsettings set org.gnome.desktop.interface font-name "$font"
+  else
+    gsettings reset org.gnome.desktop.interface font-name
+  fi
+fi
+
+mkdir -p "$HOME/.local/state"
+prev=$(cat "$HOME/.local/state/rice-active" 2>/dev/null || true)
+echo "$name" > "$HOME/.local/state/rice-active"
+
+# ---- live refresh: re-render everything without logging out ----
+size=$(cat "$src/.system/cursor-size" 2>/dev/null || echo 24)
+
+hyprctl reload
+
+if [ -n "$cur" ]; then
+  hyprctl setcursor "$cur" "$size" || true
+  dbus-update-activation-environment --systemd XCURSOR_THEME="$cur" XCURSOR_SIZE="$size" 2>/dev/null || true
+  gsettings set org.gnome.desktop.interface cursor-size "$size"
+fi
+
+pkill -x waybar 2>/dev/null || true
+pkill -x hyprpaper 2>/dev/null || true
+pkill -x hyprlauncher 2>/dev/null || true
+pkill -f ws-watch.py 2>/dev/null || true
+sleep 0.3
+if [ -f "$src/.system/daemons" ]; then
+  while IFS= read -r cmd; do
+    [ -n "$cmd" ] && setsid bash -c "$cmd" >/dev/null 2>&1 &
+  done < "$src/.system/daemons"
+fi
+
+pkill -USR1 -x kitty 2>/dev/null || true
+
+# Brave: close and reopen on this rice's profile, keeping windows on their workspaces
+if pgrep -x brave >/dev/null 2>&1; then
+  "$HOME/.local/bin/brave-layout" save "${prev:-$name}" || true
+  pkill -x brave
+  for _ in $(seq 1 40); do
+    pgrep -x brave >/dev/null 2>&1 || break
+    sleep 0.25
+  done
+  setsid "$HOME/.local/bin/brave-layout" restore "$name" "${prev:-$name}" >/dev/null 2>&1 &
+fi
+
+echo "Switched to $name. Programs that were already open may keep their old cursor until restarted."

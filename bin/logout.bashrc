@@ -1,0 +1,9 @@
+
+# log out of Hyprland
+logout() {
+  if command -v hyprshutdown >/dev/null 2>&1; then
+    hyprshutdown
+  else
+    hyprctl dispatch 'hl.dsp.exit()'
+  fi
+}

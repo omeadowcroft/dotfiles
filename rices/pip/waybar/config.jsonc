@@ -1,0 +1,214 @@
+// Pip-Boy style Waybar
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "spacing": 0,
+  "modules-left": [
+    "group/stats"
+  ],
+  "modules-center": [
+    "group/special"
+  ],
+  "modules-right": [
+    "group/skills"
+  ],
+  "group/stats": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/stats-label",
+      "custom/hp",
+      "custom/ap",
+      "custom/xp",
+      "custom/rad"
+    ]
+  },
+  "group/skills": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/skills-label",
+      "pulseaudio",
+      "network",
+      "clock",
+      "custom/lock"
+    ]
+  },
+  "custom/stats-label": {
+    "format": "STATS",
+    "tooltip": false
+  },
+  "custom/skills-label": {
+    "format": "SKILLS",
+    "tooltip": false
+  },
+  "custom/hp": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy.sh hp",
+    "return-type": "json",
+    "interval": 2
+  },
+  "custom/ap": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy.sh ap",
+    "return-type": "json",
+    "interval": 5
+  },
+  "custom/xp": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy.sh xp",
+    "return-type": "json",
+    "interval": 60
+  },
+  "custom/rad": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy.sh rad",
+    "return-type": "json",
+    "interval": 5
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 MUTE",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "VOLUME {volume}%"
+  },
+  "network": {
+    "format-ethernet": "󰈀 VAULT-42",
+    "format-wifi": "󰖩 {essid}",
+    "format-disconnected": "󰖪 NO SIGNAL",
+    "tooltip-format": "{ifname}  {ipaddr}",
+    "interval": 10
+  },
+  "clock": {
+    "format": "󰃭 {:%a %d %b %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "interval": 30
+  },
+  "custom/lock": {
+    "format": "󰌾",
+    "tooltip-format": "LOCK TERMINAL",
+    "on-click": "loginctl lock-session"
+  },
+  "custom/ws1": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 1 STAT",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws2": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 2 SPCL",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws3": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 3 PERK",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws4": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 4 WPN",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws5": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 5 APRL",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws6": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 6 AID",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 6 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws7": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 7 MISC",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 7 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws8": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 8 DATA",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 8 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws9": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 9 MAP",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 9 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws10": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-tab.py 10 RADIO",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "tooltip": true,
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 10 })' && pkill -RTMIN+8 waybar",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })' && pkill -RTMIN+8 waybar",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })' && pkill -RTMIN+8 waybar"
+  },
+  "custom/ws-watch": {
+    "exec": "$HOME/.config/waybar/scripts/pipboy-watch.py",
+    "tooltip": false
+  },
+  "group/special": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/ws1",
+      "custom/ws2",
+      "custom/ws3",
+      "custom/ws4",
+      "custom/ws5",
+      "custom/ws6",
+      "custom/ws7",
+      "custom/ws8",
+      "custom/ws9",
+      "custom/ws10",
+      "custom/ws-watch"
+    ]
+  }
+}

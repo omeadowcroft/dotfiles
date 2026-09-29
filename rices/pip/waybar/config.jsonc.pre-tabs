@@ -1,0 +1,61 @@
+// Pip-Boy style Waybar
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "spacing": 0,
+  "modules-left": ["group/stats"],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": ["group/skills"],
+
+  "group/stats": {
+    "orientation": "horizontal",
+    "modules": ["custom/stats-label", "custom/hp", "custom/ap", "custom/xp", "custom/rad"]
+  },
+  "group/skills": {
+    "orientation": "horizontal",
+    "modules": ["custom/skills-label", "pulseaudio", "network", "clock", "custom/lock"]
+  },
+
+  "custom/stats-label": { "format": "STATS", "tooltip": false },
+  "custom/skills-label": { "format": "SKILLS", "tooltip": false },
+
+  "custom/hp":  { "exec": "$HOME/.config/waybar/scripts/pipboy.sh hp",  "return-type": "json", "interval": 2 },
+  "custom/ap":  { "exec": "$HOME/.config/waybar/scripts/pipboy.sh ap",  "return-type": "json", "interval": 5 },
+  "custom/xp":  { "exec": "$HOME/.config/waybar/scripts/pipboy.sh xp",  "return-type": "json", "interval": 60 },
+  "custom/rad": { "exec": "$HOME/.config/waybar/scripts/pipboy.sh rad", "return-type": "json", "interval": 5 },
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "persistent-workspaces": { "*": 10 },
+    "format-icons": { "1": "STAT", "2": "SPCL", "3": "PERK", "4": "WPN", "5": "APRL", "6": "AID", "7": "MISC", "8": "DATA", "9": "MAP", "10": "RADIO", "default": "?" },
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
+    "on-scroll-down": "hyprctl dispatch workspace e+1"
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 MUTE",
+    "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip-format": "VOLUME {volume}%"
+  },
+  "network": {
+    "format-ethernet": "󰈀 VAULT-42",
+    "format-wifi": "󰖩 {essid}",
+    "format-disconnected": "󰖪 NO SIGNAL",
+    "tooltip-format": "{ifname}  {ipaddr}",
+    "interval": 10
+  },
+  "clock": {
+    "format": "󰃭 {:%a %d %b %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "interval": 30
+  },
+  "custom/lock": {
+    "format": "󰌾",
+    "tooltip-format": "LOCK TERMINAL",
+    "on-click": "loginctl lock-session"
+  }
+}

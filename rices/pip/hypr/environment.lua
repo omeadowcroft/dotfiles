@@ -1,0 +1,6 @@
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("WLR_NO_HARDWARE_CURSORS", "1")
+hl.env("QT_QPA_PLATFORM", "wayland")
+hl.env("XCURSOR_THEME", "Fallout-Pixel")
+hl.env("XCURSOR_SIZE", "24")

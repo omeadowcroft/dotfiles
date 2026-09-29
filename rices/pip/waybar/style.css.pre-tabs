@@ -1,0 +1,68 @@
+/* Pip-Boy Waybar - Fallout terminal palette */
+* {
+  font-family: "Fixedsys Excelsior", "JetBrainsMono Nerd Font", monospace;
+  font-size: 17pt;           /* 17pt = pixel-exact Fixedsys at 1.5x scaling */
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+window#waybar {
+  background: #08170b;
+  color: #67d97a;
+  border-bottom: 2px solid #2f8a45;
+}
+
+/* the three bracketed panels */
+#stats, #workspaces, #skills {
+  border-top: 2px solid #67d97a;
+  border-left: 3px solid #67d97a;
+  border-right: 3px solid #67d97a;
+  margin: 4px 8px 0 8px;
+  padding: 0 12px;
+}
+
+#custom-stats-label, #custom-skills-label {
+  color: #9dffae;
+  font-weight: bold;
+  padding-right: 14px;
+}
+
+#custom-hp, #custom-ap, #custom-xp, #custom-rad,
+#pulseaudio, #network, #clock, #custom-lock {
+  color: #67d97a;
+  padding: 0 9px;
+}
+
+#custom-rad {
+  border-left: 3px solid #67d97a;
+  margin-left: 6px;
+  padding-left: 14px;
+}
+
+#pulseaudio.muted, #network.disconnected { color: #e0a33a; }
+
+/* S.P.E.C.I.A.L. workspaces */
+#workspaces button {
+  color: #2f8a45;
+  background: transparent;
+  padding: 0 10px;
+  border-bottom: 3px solid transparent;
+}
+#workspaces button.active {
+  color: #9dffae;
+  border-bottom: 3px solid #67d97a;
+}
+#workspaces button.urgent { color: #e0a33a; }
+#workspaces button:hover {
+  background: #0f2614;
+  color: #9dffae;
+}
+
+tooltip {
+  background: #0b1d0f;
+  border: 2px solid #67d97a;
+}
+tooltip label { color: #67d97a; }

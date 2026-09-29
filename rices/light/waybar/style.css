@@ -1,0 +1,76 @@
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrainsMono NF", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: #cdd6f4;
+}
+
+/* the three islands */
+#stats, #status, #desktops {
+  background: rgba(24, 25, 38, 0.94);
+  border: 1px solid rgba(205, 214, 244, 0.08);
+  border-radius: 18px;
+  margin: 4px 0;
+  padding: 0 10px;
+}
+
+/* items inside the islands */
+#cpu, #memory, #disk, #temperature,
+#pulseaudio, #network, #clock, #custom-lock {
+  background: transparent;
+  padding: 0 10px;
+}
+
+/* workspace dots */
+.ws {
+  background: transparent;
+  font-size: 12px;
+  padding: 0 6px;
+  color: #7f849c;
+  transition: color 150ms ease;
+}
+
+.ws.occupied {
+  color: #bac2de;
+}
+
+.ws.active {
+  color: #cba6f7;
+  font-size: 15px;
+}
+
+.ws:hover {
+  color: #f5c2e7;
+}
+
+/* states */
+#temperature.critical,
+#network.disconnected {
+  color: #f38ba8;
+}
+
+#pulseaudio.muted {
+  color: #6c7086;
+}
+
+#clock:hover {
+  color: #f9e2af;
+}
+
+tooltip {
+  background: rgba(24, 25, 38, 0.95);
+  border: 1px solid rgba(205, 214, 244, 0.12);
+  border-radius: 12px;
+}
+
+tooltip label {
+  color: #cdd6f4;
+  padding: 2px 4px;
+}
